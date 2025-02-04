@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
-import com.kucherenko.ronis.compose_app.data.UserProfile
+import com.kucherenko.ronis.compose_app.data.models.UserProfile
 import com.kucherenko.ronis.compose_app.ui.theme.UserActiveGreen
 import com.kucherenko.ronis.compose_app.ui.theme.UserOfflineGray
 import com.kucherenko.ronis.compose_app.vm.LoginViewModel

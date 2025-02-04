@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch {
-            friendsViewModel.loadUsers()
+            friendsViewModel.loadFriends()
         }
     }
 
