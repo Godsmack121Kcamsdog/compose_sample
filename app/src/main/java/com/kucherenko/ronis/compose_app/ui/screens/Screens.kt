@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +30,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.kucherenko.ronis.compose_app.ui.navigation.Navigation
 import com.kucherenko.ronis.compose_app.ui.screens.items.AppBar
@@ -126,7 +126,7 @@ fun FriendsScreen(vm: FriendsViewModel, navController: NavHostController?) {
                 .fillMaxSize()
                 .padding(top = 100.dp)
         ) {
-            val friends by vm.usersFLow.collectAsStateWithLifecycle()
+            val friends by vm.usersFLow.collectAsState(initial = emptyList())
             LazyColumn(modifier = Modifier.padding(top = 20.dp)) {
                 items(friends) { item ->
                     ProfileCard(item) {
@@ -142,7 +142,7 @@ fun FriendsScreen(vm: FriendsViewModel, navController: NavHostController?) {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun UserDetailsScreen(vm: FriendsViewModel, navController: NavHostController?) {
-    val friend by vm.selectedUserFlow.collectAsStateWithLifecycle()
+    val friend by vm.selectedUserFlow.collectAsState(initial = null)
     Scaffold(topBar = {
         AppBar(
             icon = Icons.AutoMirrored.Filled.ArrowBack,
