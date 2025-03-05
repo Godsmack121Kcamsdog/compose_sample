@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -51,6 +53,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.kucherenko.ronis.compose_app.data.models.UserProfile
+import com.kucherenko.ronis.compose_app.data.models.network.MealResponse
 import com.kucherenko.ronis.compose_app.ui.theme.UserActiveGreen
 import com.kucherenko.ronis.compose_app.ui.theme.UserOfflineGray
 import com.kucherenko.ronis.compose_app.vm.LoginViewModel
@@ -217,6 +220,43 @@ fun ProfileContent(userProfile: UserProfile, alignment: Alignment.Horizontal = A
                 color = if (userProfile.isActive) Color.Gray else Color.Red,
                 maxLines = 1
             )
+        }
+    }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun MealsCategory(meal: MealResponse) {
+    Card(
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp),
+        colors = CardColors(
+            containerColor = Color.Transparent,
+            contentColor = Color.Black,
+            disabledContentColor = Color.Gray,
+            disabledContainerColor = Color.Gray
+        )
+    ) {
+        Row {
+            GlideImage(
+                model = meal.imageUrl,
+                contentDescription = "user image",
+                loading = placeholder(R.drawable.default_avatar),
+                failure = placeholder(R.drawable.default_avatar),
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(4.dp),
+                contentScale = ContentScale.Inside
+            )
+            Column(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(16.dp)
+            ) {
+                Text(text = meal.name, style = MaterialTheme.typography.titleMedium)
+            }
         }
     }
 }

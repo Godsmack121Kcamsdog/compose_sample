@@ -11,6 +11,8 @@ composeBom = "2025.01.01"
 navigation = "2.8.6"
 coroutines = "1.7.3"
 glide = '1.0.0-beta01'
+gson = "2.12.1"
+retrofit = "2.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,7 +34,9 @@ androidx-navigation = { group = "androidx.navigation", name = "navigation-compos
 kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlin-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 glide_compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide" }
-
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+retrofit = {group="com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}
+retrofit_converter = {group="com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

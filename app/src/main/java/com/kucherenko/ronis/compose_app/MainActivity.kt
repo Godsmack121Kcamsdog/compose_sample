@@ -15,12 +15,14 @@ import androidx.navigation.compose.rememberNavController
 import com.kucherenko.ronis.compose_app.ui.navigation.Navigation
 import com.kucherenko.ronis.compose_app.ui.screens.FriendsScreen
 import com.kucherenko.ronis.compose_app.ui.screens.LoginScreen
+import com.kucherenko.ronis.compose_app.ui.screens.MealsCategoriesScreen
 import com.kucherenko.ronis.compose_app.ui.screens.UserDetailsScreen
 import com.kucherenko.ronis.compose_app.ui.screens.UserInfoScreen
 import com.kucherenko.ronis.compose_app.ui.theme.MyApplicationTheme
 import com.kucherenko.ronis.compose_app.vm.FriendsViewModel
 import com.kucherenko.ronis.compose_app.vm.LoginViewModel
 import com.kucherenko.ronis.compose_app.vm.LoginViewModel.Event
+import com.kucherenko.ronis.compose_app.vm.MealsCategoriesViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -28,6 +30,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
     private val viewModel: LoginViewModel by viewModels()
     private val friendsViewModel: FriendsViewModel by viewModels()
+    private val mealsCategoriesViewModel: MealsCategoriesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +52,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        lifecycleScope.launch {
-            friendsViewModel.loadFriends()
-        }
     }
 
     @Composable
@@ -60,8 +59,7 @@ class MainActivity : ComponentActivity() {
         navController = rememberNavController()
         MyApplicationTheme {
             NavHost(
-                navController = navController,
-                startDestination = Navigation.LOGIN_SCREEN
+                navController = navController, startDestination = Navigation.LOGIN_SCREEN
             ) {
                 composable(route = Navigation.LOGIN_SCREEN) {
                     LoginScreen(vm = viewModel)
@@ -70,10 +68,17 @@ class MainActivity : ComponentActivity() {
                     UserInfoScreen(vm = viewModel, navController = navController)
                 }
                 composable(route = Navigation.USER_DETAILS) {
-                    UserDetailsScreen(vm = friendsViewModel, navController = navController)
+                    UserDetailsScreen(
+                        vm = friendsViewModel,
+                        mealsVm = mealsCategoriesViewModel,
+                        navController = navController
+                    )
                 }
                 composable(route = Navigation.USER_FRIENDS) {
                     FriendsScreen(vm = friendsViewModel, navController = navController)
+                }
+                composable(route = Navigation.USER_MEALS) {
+                    MealsCategoriesScreen(vm = mealsCategoriesViewModel)
                 }
             }
         }

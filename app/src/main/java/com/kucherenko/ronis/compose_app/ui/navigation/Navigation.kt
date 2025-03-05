@@ -5,4 +5,5 @@ object Navigation {
     const val USER_SCREEN = "screen_2"
     const val USER_DETAILS = "screen_3"
     const val USER_FRIENDS = "screen_4"
+    const val USER_MEALS = "screen_5"
 }

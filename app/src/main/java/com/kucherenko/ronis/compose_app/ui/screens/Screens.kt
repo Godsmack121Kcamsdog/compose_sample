@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -34,12 +36,14 @@ import androidx.navigation.NavHostController
 import com.kucherenko.ronis.compose_app.ui.navigation.Navigation
 import com.kucherenko.ronis.compose_app.ui.screens.items.AppBar
 import com.kucherenko.ronis.compose_app.ui.screens.items.LoginPasswordFields
+import com.kucherenko.ronis.compose_app.ui.screens.items.MealsCategory
 import com.kucherenko.ronis.compose_app.ui.screens.items.ProfileCard
 import com.kucherenko.ronis.compose_app.ui.screens.items.ProfileContent
 import com.kucherenko.ronis.compose_app.ui.screens.items.ProfilePicture
 import com.kucherenko.ronis.compose_app.ui.theme.MyApplicationTheme
 import com.kucherenko.ronis.compose_app.vm.FriendsViewModel
 import com.kucherenko.ronis.compose_app.vm.LoginViewModel
+import com.kucherenko.ronis.compose_app.vm.MealsCategoriesViewModel
 import com.kucherenko.ronis.myapplication.R
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -64,6 +68,19 @@ fun LoginScreen(vm: LoginViewModel) {
                     Text(text = "Login")
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun MealsCategoriesScreen(vm: MealsCategoriesViewModel) {
+    LaunchedEffect(key1 = "GET_MEALS") {
+        vm.getMeals()
+    }
+    val mealsFromApi = vm.mealsFLow.collectAsState()
+    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+        items(mealsFromApi.value) { meal ->
+            MealsCategory(meal)
         }
     }
 }
@@ -113,7 +130,13 @@ fun UserInfoScreen(
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FriendsScreen(vm: FriendsViewModel, navController: NavHostController?) {
+fun FriendsScreen(
+    vm: FriendsViewModel,
+    navController: NavHostController?
+) {
+    LaunchedEffect(key1 = "LOAD_USERS") {
+        vm.loadFriends()
+    }
     Scaffold(topBar = {
         AppBar(
             icon = Icons.AutoMirrored.Filled.ArrowBack,
@@ -141,26 +164,35 @@ fun FriendsScreen(vm: FriendsViewModel, navController: NavHostController?) {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun UserDetailsScreen(vm: FriendsViewModel, navController: NavHostController?) {
+fun UserDetailsScreen(
+    vm: FriendsViewModel,
+    mealsVm: MealsCategoriesViewModel,
+    navController: NavHostController?
+) {
     val friend by vm.selectedUserFlow.collectAsState(initial = null)
-    Scaffold(topBar = {
-        AppBar(
-            icon = Icons.AutoMirrored.Filled.ArrowBack,
-            title = "Back",
-            action = { navController?.navigateUp() }
-        )
-    }) {
+    Scaffold(
+        topBar = {
+            AppBar(
+                icon = Icons.AutoMirrored.Filled.ArrowBack,
+                title = "Back",
+                action = { navController?.navigateUp() }
+            )
+        }
+    ) {
         Surface(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 100.dp)
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 friend?.let {
-                    ProfilePicture(it, 240.dp)
+                    ProfilePicture(it, 150.dp)
                     ProfileContent(it, alignment = Alignment.CenterHorizontally)
+                    MealsCategoriesScreen(vm = mealsVm)
                 }
 
             }
@@ -191,5 +223,9 @@ fun FriendsPreview() {
 @Preview
 @Composable
 fun DetailsScreen() {
-    UserDetailsScreen(FriendsViewModel(), null)
+    UserDetailsScreen(
+        FriendsViewModel(),
+        MealsCategoriesViewModel(),
+        null
+    )
 }
