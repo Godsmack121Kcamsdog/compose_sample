@@ -77,9 +77,6 @@ class MainActivity : ComponentActivity() {
                 composable(route = Navigation.USER_FRIENDS) {
                     FriendsScreen(vm = friendsViewModel, navController = navController)
                 }
-                composable(route = Navigation.USER_MEALS) {
-                    MealsCategoriesScreen(vm = mealsCategoriesViewModel)
-                }
             }
         }
     }
