@@ -36,10 +36,10 @@ import androidx.navigation.NavHostController
 import com.kucherenko.ronis.compose_app.ui.navigation.Navigation
 import com.kucherenko.ronis.compose_app.ui.screens.items.AppBar
 import com.kucherenko.ronis.compose_app.ui.screens.items.LoginPasswordFields
-import com.kucherenko.ronis.compose_app.ui.screens.items.MealsCategory
 import com.kucherenko.ronis.compose_app.ui.screens.items.ProfileCard
 import com.kucherenko.ronis.compose_app.ui.screens.items.ProfileContent
 import com.kucherenko.ronis.compose_app.ui.screens.items.ProfilePicture
+import com.kucherenko.ronis.compose_app.ui.screens.meals.MealsCategoriesScreen
 import com.kucherenko.ronis.compose_app.ui.theme.MyApplicationTheme
 import com.kucherenko.ronis.compose_app.vm.FriendsViewModel
 import com.kucherenko.ronis.compose_app.vm.LoginViewModel
@@ -68,19 +68,6 @@ fun LoginScreen(vm: LoginViewModel) {
                     Text(text = "Login")
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun MealsCategoriesScreen(vm: MealsCategoriesViewModel) {
-    LaunchedEffect(key1 = "GET_MEALS") {
-        vm.getMeals()
-    }
-    val mealsFromApi = vm.mealsFLow.collectAsState()
-    LazyColumn(contentPadding = PaddingValues(16.dp)) {
-        items(mealsFromApi.value) { meal ->
-            MealsCategory(meal)
         }
     }
 }
@@ -192,7 +179,7 @@ fun UserDetailsScreen(
                 friend?.let {
                     ProfilePicture(it, 150.dp)
                     ProfileContent(it, alignment = Alignment.CenterHorizontally)
-                    MealsCategoriesScreen(vm = mealsVm)
+                    MealsCategoriesScreen(vm = mealsVm, navController)
                 }
 
             }

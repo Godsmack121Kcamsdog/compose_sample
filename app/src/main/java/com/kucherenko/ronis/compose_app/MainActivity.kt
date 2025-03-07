@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -15,9 +16,10 @@ import androidx.navigation.compose.rememberNavController
 import com.kucherenko.ronis.compose_app.ui.navigation.Navigation
 import com.kucherenko.ronis.compose_app.ui.screens.FriendsScreen
 import com.kucherenko.ronis.compose_app.ui.screens.LoginScreen
-import com.kucherenko.ronis.compose_app.ui.screens.MealsCategoriesScreen
 import com.kucherenko.ronis.compose_app.ui.screens.UserDetailsScreen
 import com.kucherenko.ronis.compose_app.ui.screens.UserInfoScreen
+import com.kucherenko.ronis.compose_app.ui.screens.meals.MealsCategoriesScreen
+import com.kucherenko.ronis.compose_app.ui.screens.meals.details.MealDetailsScreen
 import com.kucherenko.ronis.compose_app.ui.theme.MyApplicationTheme
 import com.kucherenko.ronis.compose_app.vm.FriendsViewModel
 import com.kucherenko.ronis.compose_app.vm.LoginViewModel
@@ -58,9 +60,7 @@ class MainActivity : ComponentActivity() {
     fun InitNavigation() {
         navController = rememberNavController()
         MyApplicationTheme {
-            NavHost(
-                navController = navController, startDestination = Navigation.LOGIN_SCREEN
-            ) {
+            NavHost(navController = navController, startDestination = "test") {
                 composable(route = Navigation.LOGIN_SCREEN) {
                     LoginScreen(vm = viewModel)
                 }
@@ -76,6 +76,13 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(route = Navigation.USER_FRIENDS) {
                     FriendsScreen(vm = friendsViewModel, navController = navController)
+                }
+                composable(route = "test") {
+                    MealsCategoriesScreen(mealsCategoriesViewModel, navController)
+                }
+                composable(route = Navigation.MEAL_DETAILS) {
+                    val meal = mealsCategoriesViewModel.selectedMealFlow.collectAsState()
+                    MealDetailsScreen(meal.value)
                 }
             }
         }

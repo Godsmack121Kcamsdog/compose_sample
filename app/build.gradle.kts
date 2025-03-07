@@ -63,7 +63,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     //UI
-    implementation(libs.glide.compose)
+    implementation(libs.coil.compose)
     //Network
     implementation(libs.gson)
     implementation(libs.retrofit)

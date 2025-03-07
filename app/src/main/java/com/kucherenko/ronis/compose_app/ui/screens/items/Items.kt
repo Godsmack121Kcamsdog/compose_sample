@@ -1,6 +1,9 @@
 package com.kucherenko.ronis.compose_app.ui.screens.items
 
+import android.util.Log
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.Close
@@ -26,6 +31,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -43,15 +49,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.placeholder
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
+import coil.transform.CircleCropTransformation
+import coil.transform.Transformation
 import com.kucherenko.ronis.compose_app.data.models.UserProfile
 import com.kucherenko.ronis.compose_app.data.models.network.MealResponse
 import com.kucherenko.ronis.compose_app.ui.theme.UserActiveGreen
@@ -173,7 +186,6 @@ fun ProfileCard(userProfile: UserProfile, action: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ProfilePicture(userProfile: UserProfile, size: Dp) {
     Card(
@@ -184,11 +196,17 @@ fun ProfilePicture(userProfile: UserProfile, size: Dp) {
         ),
         modifier = Modifier.padding(16.dp),
     ) {
-        GlideImage(
-            model = userProfile.imageUrl,
+        Image(
+            painter = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(userProfile.imageUrl)
+                    .size(Size.ORIGINAL)
+                    .placeholder(R.drawable.default_avatar) // Placeholder while loading
+                    .error(R.drawable.default_avatar) // Error image if loading fails
+                    .fallback(R.drawable.default_avatar) // Shown if URL is null
+                    .build()
+            ),
             contentDescription = "user image",
-            loading = placeholder(R.drawable.default_avatar),
-            failure = placeholder(R.drawable.default_avatar),
             modifier = Modifier.size(size),
             contentScale = ContentScale.Crop
         )
@@ -224,39 +242,3 @@ fun ProfileContent(userProfile: UserProfile, alignment: Alignment.Horizontal = A
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
-@Composable
-fun MealsCategory(meal: MealResponse) {
-    Card(
-        shape = RoundedCornerShape(8.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp),
-        colors = CardColors(
-            containerColor = Color.Transparent,
-            contentColor = Color.Black,
-            disabledContentColor = Color.Gray,
-            disabledContainerColor = Color.Gray
-        )
-    ) {
-        Row {
-            GlideImage(
-                model = meal.imageUrl,
-                contentDescription = "user image",
-                loading = placeholder(R.drawable.default_avatar),
-                failure = placeholder(R.drawable.default_avatar),
-                modifier = Modifier
-                    .size(100.dp)
-                    .padding(4.dp),
-                contentScale = ContentScale.Inside
-            )
-            Column(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(16.dp)
-            ) {
-                Text(text = meal.name, style = MaterialTheme.typography.titleMedium)
-            }
-        }
-    }
-}

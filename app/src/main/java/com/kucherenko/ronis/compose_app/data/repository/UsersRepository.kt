@@ -15,7 +15,7 @@ class UsersRepository(val dispatcher: CoroutineDispatcher = Dispatchers.IO) {
                     id = 0,
                     name = "Oleksii Kucherenko",
                     isActive = true,
-                    imageUrl = "https://modof.club/uploads/posts/2023-09/thumbs/1694750640_modof-club-p-obraz-muzhchini-v-stile-avatar-19.jpg"
+                    imageUrl = "https://img.freepik.com/free-photo/medium-shot-anime-style-man-portrait_23-2151067427.jpg"
                 )
             )
             users.add(
