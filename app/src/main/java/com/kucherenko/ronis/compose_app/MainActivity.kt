@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
     fun InitNavigation() {
         navController = rememberNavController()
         MyApplicationTheme {
-            NavHost(navController = navController, startDestination = "test") {
+            NavHost(navController = navController, startDestination = Navigation.LOGIN_SCREEN) {
                 composable(route = Navigation.LOGIN_SCREEN) {
                     LoginScreen(vm = viewModel)
                 }
